@@ -25,6 +25,8 @@ class Game():
 
         # now do inexact matches
         for i in range(len(word)):
+            if ret[i] != NO:
+                continue
             c = word[i]
             # right letter, wrong spot
             if c in counts and counts[c] > 0:
@@ -63,7 +65,7 @@ def solve():
 
 def play():
     g = Game()
-    # print('cheat:', g.target)
+    print('cheat:', g.target)
     while True:
         w = input('> ')
         if w == g.target:

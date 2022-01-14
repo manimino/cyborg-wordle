@@ -13,24 +13,25 @@ class Game():
 
     def guess(self, word):
         counts = Counter(self.target)
-        ret = []
+        ret = [NO] * 5
+        # handle matches first
         for i in range(len(word)):
             c = word[i]
-            # match
             if self.target[i] == c:
-                ret.append(c)
+                ret[i] = c
                 if c in counts:
                     counts[c] -= 1
                 continue
+
+        # now do inexact matches
+        for i in range(len(word)):
+            c = word[i]
             # right letter, wrong spot
             if c in counts and counts[c] > 0:
-                ret.append(HMM)
+                ret[i] = HMM
                 if c in counts:
                     counts[c] -= 1
                 continue
-            # nope
-            if c not in counts or counts[c] <= 0:
-                ret.append(NO)
         return ''.join(ret)
 
 
@@ -62,6 +63,7 @@ def solve():
 
 def play():
     g = Game()
+    print('cheat:', g.target)
     while True:
         w = input('> ')
         if w == g.target:
@@ -71,5 +73,5 @@ def play():
             print(' ', g.guess(w))
 
 
-# play()
-solve()
+play()
+# solve()

@@ -54,6 +54,7 @@ def solve():
         print(result)
         if w == g.target:
             print('you win!')
+            return
 
 
 def play():

@@ -63,7 +63,7 @@ def solve():
 
 def play():
     g = Game()
-    print('cheat:', g.target)
+    # print('cheat:', g.target)
     while True:
         w = input('> ')
         if w == g.target:

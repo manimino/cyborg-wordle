@@ -46,14 +46,17 @@ def solver(results):
 def solve():
     g = Game()
     guesses = dict()
+    n = 0
     while True:
         w = solver(guesses)
         result = g.guess(w)
+        n += 1
         guesses[w] = result
         print(w)
         print(result)
         if w == g.target:
             print('you win!')
+            print('and it only took', n, 'guesses')
             return
 
 

@@ -30,7 +30,7 @@ def play_interactive():
 
 def solve():
     target, _ = random.choice(all_wordle_words)
-    s = Solver()
+    s = Solver(hard_mode=True)
     guesses = {}
     guess = 'FROND'
     while True:

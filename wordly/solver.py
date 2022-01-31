@@ -1,5 +1,4 @@
 import copy
-import time
 
 from wordly.game import make_guess
 from wordly.word_pool import WordPool
@@ -29,7 +28,7 @@ class Solver():
 
         guess_scores = []
         i = 0
-        print('searching {} * {}'.format(len(self.valids.pool), len(self.targets.pool)))
+        #print('searching {} * {}'.format(len(self.valids.pool), len(self.targets.pool)))
         for guess in self.valids.pool:
             i += 1
             if i % 1000 == 0:

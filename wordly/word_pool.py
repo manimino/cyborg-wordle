@@ -71,13 +71,14 @@ class WordPool():
         only their presence matters. That's a bit different than the _apply_inexact_matches logic.
         """
         # apply greens
-        self._apply_exact_matches(self, guesses)
+        for _, result in guesses.items():
+            self._apply_exact_matches(result)
         # apply yellows
         # first, trim down pool to only words that contain at least one of each yellow letter
         for guess, result in guesses.items():
-            for i, rc in range(len(guess)):
+            for i, rc in enumerate(guess):
                 c = guess[i]
-                if rc[i] == '?':
+                if rc == '?':
                     self.remove_all_except(self.lookup[c])
         # now, handle case where there are 2+ yellows of the same letter
         q_counts = Counter(guess[i] for i in range(len(result)) if result[i] == '?')

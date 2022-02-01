@@ -2,7 +2,7 @@ import random
 
 from wordly.game import make_guess
 from wordly.solver import Solver
-from wordly.word_list import all_wordle_words
+from wordly.word_list import all_wordle_words, common_wordle_words
 
 def play_interactive():
     """
@@ -30,9 +30,9 @@ def play_interactive():
 
 def solve():
     target, _ = random.choice(all_wordle_words)
-    s = Solver(hard_mode=True)
+    s = Solver(hard_mode=False)
     guesses = {}
-    guess = 'FROND'
+    guess = random.choice(common_wordle_words)
     while True:
         result = make_guess(guess, target)
         guesses[guess] = result

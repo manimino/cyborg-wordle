@@ -1,6 +1,8 @@
 import copy
+import random
 
 from wordly.game import make_guess
+from wordly.util import ALL_POSSIBLE_RESULTS
 from wordly.word_pool import WordPool
 from wordly.word_list import all_wordle_words
 
@@ -27,20 +29,46 @@ class Solver():
             self.valids.apply_hardmode_constraints(guesses)
 
         guess_scores = []
-        i = 0
-        #print('searching {} * {}'.format(len(self.valids.pool), len(self.targets.pool)))
-        for guess in self.valids.pool:
-            i += 1
-            if i % 1000 == 0:
-                print(round(i*100 / len(self.valids.pool), 2), '% done')
+        best_score = float('inf')
+        guess_pool = random.sample(list(self.valids.pool), min(len(self.valids.pool), 25))
+        targets_pool = list(self.targets.pool)
+        """
+        if len(self.targets.pool) > 243:  # 3^5
+            # If there are many targets, we can simply try all guess results.
+            # There are 3^5 of those (each letter has 3 possible outcomes).
+            for guess in guess_pool:
+                guess_score = 0
+                for result in ALL_POSSIBLE_RESULTS:
+                    rstr = ''.join([guess[i] if result[i] == '*'
+                                    else result[i]
+                                    for i in range(len(result))])
+                    new_guesses = {guess:rstr}
+                    new_guesses.update(guesses)
+                    targets_copy = copy.deepcopy(self.targets)
+                    targets_copy.apply_guesses(new_guesses)
+                    guess_score += len(targets_copy.pool)
+                    if guess_score > best_score:
+                        break
+                if 0 < guess_score < best_score:
+                    best_score = guess_score
+                    guess_scores.append((guess, guess_score))
+        else:
+        """
+        for guess in guess_pool:
             guess_score = 0
             guesses_copy = copy.deepcopy(guesses)
-            for tw in self.targets.pool:
+            random.shuffle(targets_pool)
+            for tw in targets_pool[:25]:
                 targets_copy = copy.deepcopy(self.targets)
-                guesses_copy[guess] = make_guess(guess, tw)
+                new_guesses = {guess: make_guess(guess, tw)}
+                new_guesses.update(guesses)
                 targets_copy.apply_guesses(guesses_copy)
                 guess_score += len(targets_copy.pool)
-            guess_scores.append((guess, guess_score))
+                if guess_score > best_score:
+                    break
+            if guess_score < best_score:
+                guess_scores.append((guess, guess_score))
+
         guess_scores.sort(key=lambda x: x[1])
         return guess_scores
 

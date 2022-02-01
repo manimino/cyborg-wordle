@@ -15,6 +15,8 @@ So far you've guessed: `SWORD`, `WORDS`, and `WORMS`. `SWORD` had 4 yellows, `WO
 
 Let's post the guesses and see what we get back. 
 
+Text test: <span style="color:blue">some *blue* text</span>.
+
 Request:
 ```
 curl -X POST \

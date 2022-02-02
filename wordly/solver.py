@@ -25,7 +25,7 @@ As a human player, these strategies intuitive.
 [2] http://sonorouschocolate.com/notes/index.php?title=The_best_strategies_for_Wordle
 """
 class Solver():
-    def __init__(self, hard_mode=False, cost_exp=2, max_pool_size=5000, gt_ratio=1):
+    def __init__(self, hard_mode=False, cost_exp=1.75, max_pool_size=5000, gt_ratio=1):
         self.hard_mode = hard_mode
         # targets represents the remaining possible solutions to a puzzle after applying guesses
         self.targets = WordPool()

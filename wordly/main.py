@@ -2,15 +2,16 @@ import random
 
 from wordly.game import make_guess
 from wordly.solver import Solver
-from wordly.word_list import all_wordle_words, common_wordle_words
+from wordly.word_list import all_wordle_words, common_wordle_words_4k
 
 def play_interactive():
     """
     Plays the game interactively from the command line
+    Targets will be in the 4000 most common English words that are in the
+    Wordle dictionary, because solutions like ESNES and ROLAG are rage-inducing.
     """
     valid = set(x[0] for x in all_wordle_words)
-    target, _ = random.choice(all_wordle_words)
-
+    target = random.choice(common_wordle_words_4k)
     while True:
         w = input('> ')
         w = w.upper()
@@ -32,7 +33,7 @@ def solve():
     target, _ = random.choice(all_wordle_words)
     s = Solver(hard_mode=False)
     guesses = {}
-    guess = random.choice(common_wordle_words)
+    guess = random.choice(common_wordle_words_4k)
     while True:
         result = make_guess(guess, target)
         guesses[guess] = result
@@ -52,5 +53,5 @@ def solve():
             guess = next_words[0][0]
 
 
-# play_interactive()
-solve()
+play_interactive()
+# solve()

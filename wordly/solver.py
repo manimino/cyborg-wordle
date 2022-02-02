@@ -7,7 +7,21 @@ from wordly.word_pool import WordPool
 from wordly.word_list import all_wordle_words
 
 """
-The Solver applies guesses to a Dictionary, whittling down its available word set. 
+The Solver suggests a next word based on all available information.
+
+An optimal solver would generate a full possibility tree for all possible target words
+and all available guesses. It minimizes the depth of the search tree. 
+That would take days to run on a modern computer, even in a compiled language. [1]
+
+So this solver relies on various heuristics to short-cut the process. 
+Heuristics have near-optimal performance in practice [2].
+
+As a human player, these strategies intuitive.
+- Guess words that contain letters we haven't seen yet to maximize information gain.
+- 
+
+[1] https://www.poirrier.ca/notes/wordle/
+[2] http://sonorouschocolate.com/notes/index.php?title=The_best_strategies_for_Wordle
 """
 class Solver():
     def __init__(self, hard_mode=False):

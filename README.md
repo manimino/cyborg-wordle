@@ -1,43 +1,25 @@
 # Wordly
 
-Assistant for Wordle. Helps you think of what to guess next.
-
-Send it your guesses and results, it will send back some words you can try.
+Command-line Wordle game with a hint engine and a fast heuristic solver.
 
 ## Usage 
 
-Run:
-`docker run .`
-
-Suppose you're playing a Wordle and the answer is `WORKS`.
-
-So far you've guessed: `SWORD`, `WORDS`, and `WORMS`. `SWORD` had 4 yellows, `WORDS` and `WORMS` each had 4 greens.
-
-Let's post the guesses and see what we get back. 
-
-Text test: <span style="color:blue">some *blue* text</span>.
-
-Request:
+Clone / install
 ```
-curl -X POST \
-localhost:54345/words \
--H "Content-type: application/json" \
--d '{"SWORD:????.","WORDS":"WOR.S","WORMS":"WOR.S"}'
+git clone git@github.com:shoreofwonder/wordly
+pip install ./wordly
 ```
 
-Response:
-```
-WORKS
-WORTS
-```
+Then run `wordly` to play. 
 
-### Request Formatting
+## Design Details
 
-The content is a JSON dict of `Guess: Result` string pairs. 
+### Game
 
-The Guess is the word you guessed.
+Supports normal and hard modes. In hard mode, information from guesses must be used.
 
-Result format:
- * '.' for a black letter
- * '?' for a yellow letter
- * The actual letter for a green letter, e.g. 'A' or 'B'.
+Solutions will always be in the top 4000 most common English words. However, all 12,972 Wordle words
+may be used as guesses.
+
+
+### Hints

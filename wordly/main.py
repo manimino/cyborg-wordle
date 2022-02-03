@@ -151,7 +151,7 @@ def fit_params():
 
 
 if __name__ == '__main__':
-    # play_interactive()
-    fit_params()
+    play_interactive()
+    # fit_params()
     #s = Solver(hard_mode=False)
     #solve(s)

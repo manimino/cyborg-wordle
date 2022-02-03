@@ -8,13 +8,15 @@ The AI is fast and has a win rate over 99%.
 
 Type '?' to get a hint from the AI if you're stuck.
 
+![demo](images/demo_daddy.gif)
+
 ## Usage 
 
-To play: `python wordly.py`
+To play: `python wordly/main.py`. You may need to `export PYTHONPATH=${PYTHONPATH}:.` first.
 
-Hard mode: `python wordly.py -h` or `--hard`
+Hard mode: `python wordly/main.py --hard` 
 
-AI-only game: `python wordly.py -a` or `--ai`. Can be used with hard mode.
+AI-only game: `python wordly/main.py --ai`. Can be used with hard mode.
 
 ## Design Details
 

@@ -12,6 +12,7 @@ will remove words from the pool.
 Used by the Solver to represent the set of possible solutions and the set of valid guesses.
 """
 
+
 class WordPool():
 
     def __init__(self):

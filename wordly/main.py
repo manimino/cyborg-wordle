@@ -1,9 +1,13 @@
+import argparse
+import cmd
 import random
+
 from collections import Counter
 
 from wordly.game import make_guess
 from wordly.solver import Solver
 from wordly.util import ColoredText
+from word_pool import WordPool
 from wordly.word_list import all_wordle_words, common_wordle_words_4k
 
 
@@ -27,63 +31,6 @@ def render_game(guesses: list):
     for _ in range(n_blank):
         print(' '*12 + ' '.join(['_']*5))
     print('')
-
-
-def keyboard_str(guesses: list) -> str:
-    letters = 'abcdefghijklmnopqrstuvwxyz'.upper()
-    letter_colors = dict(zip(letters, ['']*26))
-    for guess, result in guesses:
-        for i, c in enumerate(guess):
-            if result[i] == '?':
-                # inexact match
-                letter_colors[c] = ColoredText.WARNING
-            elif result[i] == '.':
-                # nonmatch
-                letter_colors[c] = ColoredText.FAIL
-            else:
-                # match
-                letter_colors[c] = ColoredText.OKGREEN
-    ret = []
-    for l in letters:
-        ret.append(letter_colors[l] + l + ColoredText.ENDC)
-    return ' '*3 + '(' + ''.join(ret) + ')'
-
-
-def play_interactive():
-    """
-    Plays the game interactively from the command line
-    Targets will be in the 4000 most common English words that are in the
-    Wordle dictionary, because solutions like ESNES and ROLAG are rage-inducing.
-    """
-    print("\n-----=====  It's Wordly Time!  =====-----")
-    print("Guess a five-letter word, or ? for a hint.")
-    valid = set(x[0] for x in all_wordle_words)
-    target = random.choice(common_wordle_words_4k)
-    guesses = []
-    while True:
-        render_game(guesses)
-        w = input(keyboard_str(guesses) + ' > ')
-        w = w.upper()
-
-        if w == "?":  # hax
-            s = Solver()
-            ai_words = s.get_next_words(dict(guesses))
-            print(ai_words)
-            ai_word = ai_words[0][0]
-            print('   Try the word "{}".'.format(ai_word))
-            continue
-
-        if len(w) != 5 or w not in valid:
-            print('Invalid word:', w)
-            continue
-
-        result = make_guess(w, target)
-        guesses.append((w, result))
-
-        if w == target:
-            render_game(guesses)
-            print('you win!')
-            return
 
 
 def solve(s: Solver):
@@ -150,8 +97,98 @@ def fit_params():
     print(tot)
 
 
+def keyboard_str(guesses: list) -> str:
+    letters = 'abcdefghijklmnopqrstuvwxyz'.upper()
+    letter_colors = dict(zip(letters, ['']*26))
+    for guess, result in guesses:
+        for i, c in enumerate(guess):
+            if result[i] == '?':
+                # inexact match
+                letter_colors[c] = ColoredText.WARNING
+            elif result[i] == '.':
+                # nonmatch
+                letter_colors[c] = ColoredText.FAIL
+            else:
+                # match
+                letter_colors[c] = ColoredText.OKGREEN
+    ret = []
+    for l in letters:
+        ret.append(letter_colors[l] + l + ColoredText.ENDC)
+    return ' '*3 + '(' + ''.join(ret) + ')'
+
+
+class PlayHuman(cmd.Cmd):
+    """
+    Plays the game interactively from the command line
+    Targets will be in the 4000 most common English words that are in the
+    Wordle dictionary.
+    The cmd superclass is used for its nice command history.
+    """
+
+    def __init__(self, hard_mode=False):
+        super().__init__()
+        self.hard_mode = hard_mode
+        print("\n-----=====  It's Wordly Time!  =====-----")
+        print("Guess a five-letter word, or ? for a hint.")
+        self.guesses = []
+        self.prompt = keyboard_str(self.guesses) + ' > '
+        self.valid = WordPool()
+        self.all_words = set(x[0] for x in all_wordle_words)
+        self.target = random.choice(common_wordle_words_4k)
+
+    def preloop(self) -> None:
+        render_game(self.guesses)
+
+    def parseline(self, line):
+        return None, None, line
+
+    def default(self, line):
+        # renders the prompt and gets a response
+        w = line.strip().upper()
+
+        if w == "?":  # get a hint from the AI
+            s = Solver(hard_mode=self.hard_mode)
+            ai_words = s.get_next_words(dict(self.guesses))
+            ai_word = ai_words[0][0]
+            render_game(self.guesses)
+            print(ColoredText.OKBLUE + ' '*7 + 'Try the word "{}".\n'.format(ai_word) + ColoredText.ENDC)
+            return
+
+        if len(w) != 5:
+            print(ColoredText.OKBLUE + ' '*7 + "Need a 5-letter word.\n" + ColoredText.ENDC)
+            return False
+
+        if w not in self.all_words:
+            print(ColoredText.OKBLUE + ' '*7 + '{} is not a word.\n'.format(w) + ColoredText.ENDC)
+            return False
+
+        if self.hard_mode and w not in self.valid.pool:
+            print(ColoredText.OKBLUE + ' '*7 + '{} violates the hard mode rules.\n'.format(w) + ColoredText.ENDC)
+            return False
+
+        result = make_guess(w, self.target)
+        self.guesses.append((w, result))
+        self.prompt = keyboard_str(self.guesses) + ' > '
+        if self.hard_mode:
+            self.valid.apply_hardmode_constraints(dict(self.guesses))
+
+        render_game(self.guesses)
+        if w == self.target:
+            if self.hard_mode:
+                print(ColoredText.OKBLUE + ' '*12 + '*You win!*' + ColoredText.ENDC)
+            else:
+                print(ColoredText.OKBLUE + ' '*12 + 'You win!' + ColoredText.ENDC)
+            return True
+
+
 if __name__ == '__main__':
-    play_interactive()
-    # fit_params()
-    #s = Solver(hard_mode=False)
-    #solve(s)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--ai', action='store_true')
+    parser.add_argument('--hard', action='store_true')
+    args = parser.parse_args()
+
+    if args.ai:
+        s = Solver(hard_mode=args.hard)
+        solve(s)
+    else:
+        PlayHuman(hard_mode=args.hard).cmdloop()

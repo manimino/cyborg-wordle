@@ -1,0 +1,191 @@
+# The configurations that used for the recording, feel free to edit them
+config:
+
+  # Specify a command to be executed
+  # like `/bin/bash -l`, `ls`, or any other commands
+  # the default is bash for Linux
+  # or powershell.exe for Windows
+  command: bash -l
+  
+  # Specify the current working directory path
+  # the default is the current working directory path
+  cwd: /home/theo/repos/wordly
+  
+  # Export additional ENV variables
+  env:
+    recording: true
+  
+  # Explicitly set the number of columns
+  # or use `auto` to take the current
+  # number of columns of your shell
+  cols: 50
+  
+  # Explicitly set the number of rows
+  # or use `auto` to take the current
+  # number of rows of your shell
+  rows: 11
+  
+  # Amount of times to repeat GIF
+  # If value is -1, play once
+  # If value is 0, loop indefinitely
+  # If value is a positive number, loop n times
+  repeat: 0
+  
+  # Quality
+  # 1 - 100
+  quality: 100
+  
+  # Delay between frames in ms
+  # If the value is `auto` use the actual recording delays
+  frameDelay: auto
+  
+  # Maximum delay between frames in ms
+  # Ignored if the `frameDelay` isn't set to `auto`
+  # Set to `auto` to prevent limiting the max idle time
+  maxIdleTime: 2000
+  
+  # The surrounding frame box
+  # The `type` can be null, window, floating, or solid`
+  # To hide the title use the value null
+  # Don't forget to add a backgroundColor style with a null as type
+  frameBox:
+    type: floating
+    title: Terminalizer
+    style:
+      border: 0px black solid
+      # boxShadow: none
+      # margin: 0px
+  
+  # Add a watermark image to the rendered gif
+  # You need to specify an absolute path for
+  # the image on your machine or a URL, and you can also
+  # add your own CSS styles
+  watermark:
+    imagePath: null
+    style:
+      position: absolute
+      right: 15px
+      bottom: 15px
+      width: 100px
+      opacity: 0.9
+  
+  # Cursor style can be one of
+  # `block`, `underline`, or `bar`
+  cursorStyle: block
+  
+  # Font family
+  # You can use any font that is installed on your machine
+  # in CSS-like syntax
+  fontFamily: "Monaco, Lucida Console, Ubuntu Mono, Monospace"
+  
+  # The size of the font
+  fontSize: 12
+  
+  # The height of lines
+  lineHeight: 1
+  
+  # The spacing between letters
+  letterSpacing: 0
+  
+  # Theme
+  theme:
+    background: "transparent"
+    foreground: "#afafaf"
+    cursor: "#c7c7c7"
+    black: "#232628"
+    red: "#fc4384"
+    green: "#b3e33b"
+    yellow: "#ffa727"
+    blue: "#75dff2"
+    magenta: "#ae89fe"
+    cyan: "#708387"
+    white: "#d5d5d0"
+    brightBlack: "#626566"
+    brightRed: "#ff7fac"
+    brightGreen: "#c8ed71"
+    brightYellow: "#ebdf86"
+    brightBlue: "#75dff2"
+    brightMagenta: "#ae89fe"
+    brightCyan: "#b1c6ca"
+    brightWhite: "#f9f9f4"
+  
+# Records, feel free to edit them
+records:
+  - delay: 573
+    content: "\e]0;shoreofwonder@cubic:~/repos/wordly\a\e[?2004h(base) \e[01;32m[theo@cubic\e[01;37m wordly\e[01;32m]$\e[00m "
+  - delay: 419
+    content: 'python wordly/main.py'
+  - delay: 494
+    content: "\r\n\e[?2004l\r"
+  - delay: 37
+    content: "\r\n-----=====  It's Wordly Time!  =====-----\r\nGuess a five-letter word, or ? for a hint.\r\n"
+  - delay: 15
+    content: "\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n\r\n   (A\e[0mB\e[0mC\e[0mD\e[0mE\e[0mF\e[0mG\e[0mH\e[0mI\e[0mJ\e[0mK\e[0mL\e[0mM\e[0mN\e[0mO\e[0mP\e[0mQ\e[0mR\e[0mS\e[0mT\e[0mU\e[0mV\e[0mW\e[0mX\e[0mY\e[0mZ\e[0m) > "
+  - delay: 1919
+    content: d
+  - delay: 157
+    content: r
+  - delay: 107
+    content: i
+  - delay: 113
+    content: v
+  - delay: 86
+    content: e
+  - delay: 190
+    content: "\r\n\r\n            \e[92mD\e[0m \e[91mR\e[0m \e[91mI\e[0m \e[91mV\e[0m \e[91mE\e[0m\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n\r\n   (A\e[0mB\e[0mC\e[0m\e[92mD\e[0m\e[91mE\e[0mF\e[0mG\e[0mH\e[0m\e[91mI\e[0mJ\e[0mK\e[0mL\e[0mM\e[0mN\e[0mO\e[0mP\e[0mQ\e[0m\e[91mR\e[0mS\e[0mT\e[0mU\e[0m\e[91mV\e[0mW\e[0mX\e[0mY\e[0mZ\e[0m) > "
+  - delay: 3593
+    content: d
+  - delay: 155
+    content: o
+  - delay: 146
+    content: o
+  - delay: 93
+    content: r
+  - delay: 226
+    content: s
+  - delay: 919
+    content: "\r\n\r\n            \e[92mD\e[0m \e[91mR\e[0m \e[91mI\e[0m \e[91mV\e[0m \e[91mE\e[0m\r\n            \e[92mD\e[0m \e[91mO\e[0m \e[91mO\e[0m \e[91mR\e[0m \e[91mS\e[0m\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n\r\n   (A\e[0mB\e[0mC\e[0m\e[92mD\e[0m\e[91mE\e[0mF\e[0mG\e[0mH\e[0m\e[91mI\e[0mJ\e[0mK\e[0mL\e[0mM\e[0mN\e[0m\e[91mO\e[0mP\e[0mQ\e[0m\e[91mR\e[0m\e[91mS\e[0mT\e[0mU\e[0m\e[91mV\e[0mW\e[0mX\e[0mY\e[0mZ\e[0m) > "
+  - delay: 4122
+    content: d
+  - delay: 198
+    content: a
+  - delay: 2055
+    content: t
+  - delay: 1731
+    content: e
+  - delay: 214
+    content: d
+  - delay: 243
+    content: "\r\n\r\n            \e[92mD\e[0m \e[91mR\e[0m \e[91mI\e[0m \e[91mV\e[0m \e[91mE\e[0m\r\n            \e[92mD\e[0m \e[91mO\e[0m \e[91mO\e[0m \e[91mR\e[0m \e[91mS\e[0m\r\n            \e[92mD\e[0m \e[92mA\e[0m \e[91mT\e[0m \e[91mE\e[0m \e[93mD\e[0m\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n\r\n   (\e[92mA\e[0mB\e[0mC\e[0m\e[93mD\e[0m\e[91mE\e[0mF\e[0mG\e[0mH\e[0m\e[91mI\e[0mJ\e[0mK\e[0mL\e[0mM\e[0mN\e[0m\e[91mO\e[0mP\e[0mQ\e[0m\e[91mR\e[0m\e[91mS\e[0m\e[91mT\e[0mU\e[0m\e[91mV\e[0mW\e[0mX\e[0mY\e[0mZ\e[0m) > "
+  - delay: 4375
+    content: '?'
+  - delay: 472
+    content: "\r\n"
+  - delay: 412
+    content: "\r\n            \e[92mD\e[0m \e[91mR\e[0m \e[91mI\e[0m \e[91mV\e[0m \e[91mE\e[0m\r\n            \e[92mD\e[0m \e[91mO\e[0m \e[91mO\e[0m \e[91mR\e[0m \e[91mS\e[0m\r\n            \e[92mD\e[0m \e[92mA\e[0m \e[91mT\e[0m \e[91mE\e[0m \e[93mD\e[0m\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n\r\n\e[94m       Try the word \"GUNDY\".\r\n\e[0m\r\n   (\e[92mA\e[0mB\e[0mC\e[0m\e[93mD\e[0m\e[91mE\e[0mF\e[0mG\e[0mH\e[0m\e[91mI\e[0mJ\e[0mK\e[0mL\e[0mM\e[0mN\e[0m\e[91mO\e[0mP\e[0mQ\e[0m\e[91mR\e[0m\e[91mS\e[0m\e[91mT\e[0mU\e[0m\e[91mV\e[0mW\e[0mX\e[0mY\e[0mZ\e[0m) > "
+  - delay: 1337
+    content: g
+  - delay: 112
+    content: u
+  - delay: 97
+    content: 'n'
+  - delay: 111
+    content: d
+  - delay: 186
+    content: 'y'
+  - delay: 418
+    content: "\r\n\r\n            \e[92mD\e[0m \e[91mR\e[0m \e[91mI\e[0m \e[91mV\e[0m \e[91mE\e[0m\r\n            \e[92mD\e[0m \e[91mO\e[0m \e[91mO\e[0m \e[91mR\e[0m \e[91mS\e[0m\r\n            \e[92mD\e[0m \e[92mA\e[0m \e[91mT\e[0m \e[91mE\e[0m \e[93mD\e[0m\r\n            \e[91mG\e[0m \e[91mU\e[0m \e[91mN\e[0m \e[92mD\e[0m \e[92mY\e[0m\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n\r\n   (\e[92mA\e[0mB\e[0mC\e[0m\e[92mD\e[0m\e[91mE\e[0mF\e[0m\e[91mG\e[0mH\e[0m\e[91mI\e[0mJ\e[0mK\e[0mL\e[0mM\e[0m\e[91mN\e[0m\e[91mO\e[0mP\e[0mQ\e[0m\e[91mR\e[0m\e[91mS\e[0m\e[91mT\e[0m\e[91mU\e[0m\e[91mV\e[0mW\e[0mX\e[0m\e[92mY\e[0mZ\e[0m) > "
+  - delay: 2412
+    content: d
+  - delay: 150
+    content: a
+  - delay: 251
+    content: d
+  - delay: 133
+    content: d
+  - delay: 408
+    content: 'y'
+  - delay: 384
+    content: "\r\n\r\n            \e[92mD\e[0m \e[91mR\e[0m \e[91mI\e[0m \e[91mV\e[0m \e[91mE\e[0m\r\n            \e[92mD\e[0m \e[91mO\e[0m \e[91mO\e[0m \e[91mR\e[0m \e[91mS\e[0m\r\n            \e[92mD\e[0m \e[92mA\e[0m \e[91mT\e[0m \e[91mE\e[0m \e[93mD\e[0m\r\n            \e[91mG\e[0m \e[91mU\e[0m \e[91mN\e[0m \e[92mD\e[0m \e[92mY\e[0m\r\n            \e[92mD\e[0m \e[92mA\e[0m \e[92mD\e[0m \e[92mD\e[0m \e[92mY\e[0m\r\n            _ _ _ _ _\r\n\r\n\e[94m            You win!\e[0m\r\n"
+  - delay: 1207
+    content: "\n"

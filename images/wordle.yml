@@ -101,9 +101,9 @@ config:
     cyan: "#708387"
     white: "#d5d5d0"
     brightBlack: "#626566"
-    brightRed: "#ff7fac"
-    brightGreen: "#c8ed71"
-    brightYellow: "#ebdf86"
+    brightRed: "#ff0000"
+    brightGreen: "#00ff00"
+    brightYellow: "#ffff00"
     brightBlue: "#75dff2"
     brightMagenta: "#ae89fe"
     brightCyan: "#b1c6ca"
@@ -111,13 +111,9 @@ config:
   
 # Records, feel free to edit them
 records:
-  - delay: 573
-    content: "\e]0;shoreofwonder@cubic:~/repos/wordly\a\e[?2004h(base) \e[01;32m[theo@cubic\e[01;37m wordly\e[01;32m]$\e[00m "
-  - delay: 419
+  - delay: 1919
     content: 'python wordly/main.py'
-  - delay: 494
-    content: "\r\n\e[?2004l\r"
-  - delay: 37
+  - delay: 537
     content: "\r\n-----=====  It's Wordly Time!  =====-----\r\nGuess a five-letter word, or ? for a hint.\r\n"
   - delay: 15
     content: "\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n            _ _ _ _ _\r\n\r\n   (A\e[0mB\e[0mC\e[0mD\e[0mE\e[0mF\e[0mG\e[0mH\e[0mI\e[0mJ\e[0mK\e[0mL\e[0mM\e[0mN\e[0mO\e[0mP\e[0mQ\e[0mR\e[0mS\e[0mT\e[0mU\e[0mV\e[0mW\e[0mX\e[0mY\e[0mZ\e[0m) > "

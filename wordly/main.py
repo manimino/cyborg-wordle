@@ -36,7 +36,7 @@ def render_game(guesses: list):
 def solve(s: Solver):
     target, _ = random.choice(all_wordle_words)
     guesses = {}
-    guess = random.choice(common_wordle_words_4k)
+    guess = s.get_next_words(guesses)[0][0]
     while True:
         result = make_guess(guess, target)
         guesses[guess] = result
@@ -53,48 +53,6 @@ def solve(s: Solver):
             next_words = s.get_next_words(guesses)
             print(next_words[:min(10, len(next_words))])
             guess = next_words[0][0]
-
-
-def fit_params():
-    all_results = []
-    N_TRIALS = 1000
-    cost_exps = [1.75]
-    mpoolsizes = [5000]
-    gt_ratios = [1.0]
-    modes = [True, False]
-    import math
-    tot = math.prod([len(x) for x in [cost_exps, mpoolsizes, gt_ratios, modes]])
-    tot *= N_TRIALS
-    print('running', tot, 'trials')
-    tnum = 0
-    for hard_mode in modes:
-        for cost_exp in cost_exps:
-            for max_pool_size in mpoolsizes:
-                for gt_ratio in gt_ratios:
-
-                    results = []
-                    for i in range(N_TRIALS):
-                        tnum += 1
-                        if tnum % 10 == 2:
-                            print(round(tnum / tot * 100, 3), '% done')
-                        s = Solver(hard_mode=hard_mode,
-                                   max_pool_size=max_pool_size,
-                                   gt_ratio=gt_ratio,
-                                   cost_exp=cost_exp)
-                        result = solve(s)
-                        results.append(result)
-                    counts = Counter(results)
-                    losses = 0
-                    mean = round(sum(results) / len(results), 3)
-                    for k in counts.keys():
-                        if k > 6:
-                            losses += 1
-                    losses = round(losses / len(results) * 100, 3)
-                    all_results.append((hard_mode, cost_exp, max_pool_size, gt_ratio, mean, losses))
-    print('hard_mode, cost_exp, max_pool_size, gt_ratio, mean, losses')
-    for r in all_results:
-        print(str(r) + ',')
-    print(tot)
 
 
 def keyboard_str(guesses: list) -> str:

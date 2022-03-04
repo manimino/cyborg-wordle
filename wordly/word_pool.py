@@ -63,6 +63,7 @@ class WordPool():
             self._apply_exact_matches(result)
             self.apply_nonmatches(guess, result)
             self._apply_inexact_matches(guess, result)
+            self.remove(guess)  # don't guess the same word repeatedly
 
     def apply_hardmode_constraints(self, guesses: dict):
         """

@@ -5,7 +5,7 @@ from typing import *
 
 from wordly.game import make_guess
 from wordly.word_pool import WordPool
-from wordly.word_list import all_wordle_words, top_first_guesses
+from wordly.word_list import all_wordle_words, top_first_guesses, common_wordle_words_4k
 
 """
 The Solver suggests a next word based on all available information.
@@ -141,7 +141,16 @@ class Solver():
         targets_pool = list(targets_subset.pool)
 
         for guess in guess_pool:
-            guess_score = 0
+            guess_score = 10
+            # Hack: Give a small bonus to common words and words in target pool. 
+            # This bonus will matter more as the target pool gets smaller.
+            # Makes performance better on real-human Wordles without sacrificing too much.
+            if guess in self.targets.pool:
+                guess_score -= 5
+            if guess in common_wordle_words_4k:
+                guess_score -= 5
+            
+            # now, let's see what the solution space looks like after applying this guess
             guesses_copy = copy.deepcopy(guesses)
             for i, tw in enumerate(targets_pool):
                 targets_copy = copy.deepcopy(targets_subset)
@@ -159,7 +168,6 @@ class Solver():
                 best_score = guess_score
                 guess_scores.append((guess, round(guess_score, 3)))
 
-        #print(len(valids_subset.pool), len(targets_subset.pool), pool_size, round(time.time()-t0, 3))
         guess_scores.sort(key=lambda x: x[1])
         return guess_scores
 

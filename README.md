@@ -4,9 +4,9 @@ Command-line Wordle game with optional assistance from your AI pal, Wordly.
 
 Supports normal mode and hard mode.
 
-Wordly wins on over 99% of all Wordle puzzles.
+Wordly is a clever Wordle AI. It wins over 99% of all Wordles.
 
-Type '?' to get a hint from the AI if you're stuck.
+Type '?' to get a hint from Wordly if you're stuck.
 
 ![demo](images/demo_daddy.gif)
 
@@ -16,7 +16,7 @@ To play: `python main.py`.
 
 Hard mode: `python main.py --hard` 
 
-Watch the AI play: `python main.py --ai`. Can be used with hard mode.
+Watch Wordly play: `python main.py --ai`. Can be used with hard mode.
 
 ## Design Details
 
@@ -40,6 +40,17 @@ Learning from Wordly is a great way to train your Wordle skills.
 When a hint is requested, Wordly does not exhaustively search every possible guess and solution.
 That would take days of compute time, even in a compiled language. 
 
-Instead, Wordly uses various heuristics and probablistic methods to produce an excellent guess.
-It has been shown that heuristics closely approximate optimal play. Using these, Wordly produces a 
-high-quality hint in under 1 second. 
+Instead, Wordly suggests a next word based on previous guesses. Wordly may guess words that could
+not possibly be the answer. Sometimes it is best to guess a different word in order to narrow down
+the possibility space.
+
+Wordly does not do an exhaustive search. It has been shown that heuristics closely approximate optimal play. Using these, Wordly produces a high-quality hint in under 1 second. Optimal play is very expensive, as the possibility tree it quite large.
+
+Initially, Wordly will guess words that narrow down the possibilities as much as possible.
+This means it may guess a word that cannot possibly be the right answer. As the pool
+of possible guesses shrinks, it will start to prefer picking from the likely targets. 
+
+### Further reading
+
+https://www.poirrier.ca/notes/wordle
+http://sonorouschocolate.com/notes/index.php?title=The_best_strategies_for_Wordle

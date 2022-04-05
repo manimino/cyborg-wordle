@@ -7,23 +7,7 @@ from wordly.game import make_guess
 from wordly.word_pool import WordPool
 from wordly.word_list import all_wordle_words, top_first_guesses, common_wordle_words_4k
 
-"""
-The Solver suggests a next word based on all available information.
 
-An optimal solver would generate a full possibility tree for all possible target words
-and all available guesses. It minimizes the depth of the search tree. 
-That would take days to run on a modern computer, even in a compiled language. [1]
-
-So this solver relies on various heuristics to short-cut the process. 
-Heuristics have near-optimal performance in practice [2].
-
-As a human player, these strategies intuitive.
-- Guess words that contain letters we haven't seen yet to maximize information gain.
-- 
-
-[1] https://www.poirrier.ca/notes/wordle/
-[2] http://sonorouschocolate.com/notes/index.php?title=The_best_strategies_for_Wordle
-"""
 class Solver():
     def __init__(self, hard_mode=False, cost_exp=1.75, max_pool_size=5000, gt_ratio=1):
         self.hard_mode = hard_mode
@@ -108,30 +92,6 @@ class Solver():
             pool_size = len(targets_subset.pool) * len(valids_subset.pool)
 
         t0 = time.time()
-
-
-        """
-        if len(self.targets.pool) > 243:  # 3^5
-            # If there are many targets, we can simply try all guess results.
-            # There are 3^5 of those (each letter has 3 possible outcomes).
-            for guess in guess_pool:
-                guess_score = 0
-                for result in ALL_POSSIBLE_RESULTS:
-                    rstr = ''.join([guess[i] if result[i] == '*'
-                                    else result[i]
-                                    for i in range(len(result))])
-                    new_guesses = {guess:rstr}
-                    new_guesses.update(guesses)
-                    targets_copy = copy.deepcopy(self.targets)
-                    targets_copy.apply_guesses(new_guesses)
-                    guess_score += len(targets_copy.pool)
-                    if guess_score > best_score:
-                        break
-                if 0 < guess_score < best_score:
-                    best_score = guess_score
-                    guess_scores.append((guess, guess_score))
-        else:
-        """
 
         # now search all (valid guess, target) pairs to find the best guess from the
         # reduced pools.

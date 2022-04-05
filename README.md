@@ -1,10 +1,10 @@
-# Wordly
+# Cyborg Wordle
 
-Command-line Wordle game with optional AI assistance.
+Command-line Wordle game with optional assistance from your AI pal, Wordly.
 
 Supports normal mode and hard mode.
 
-The AI is fast and has a win rate over 99%. 
+Wordly wins on over 99% of all Wordle puzzles.
 
 Type '?' to get a hint from the AI if you're stuck.
 
@@ -12,11 +12,11 @@ Type '?' to get a hint from the AI if you're stuck.
 
 ## Usage 
 
-To play: `python wordly/main.py`. You may need to `export PYTHONPATH=${PYTHONPATH}:.` first.
+To play: `python main.py`.
 
-Hard mode: `python wordly/main.py --hard` 
+Hard mode: `python main.py --hard` 
 
-AI-only game: `python wordly/main.py --ai`. Can be used with hard mode.
+Watch the AI play: `python main.py --ai`. Can be used with hard mode.
 
 ## Design Details
 
@@ -35,11 +35,11 @@ Wordle is a solved game in both easy and hard modes. There exists a tree of gues
 that will always win the game. However, following the same decision tree every game isn't much fun.
 
 Thus, this implementation is a 'cyborg' game, where a human plays with optional computer assistance. 
-Learning from the Wordly AI is a great way to train your Wordle skills.
+Learning from Wordly is a great way to train your Wordle skills.
 
-When a hint is requested, the AI does not exhaustively search every possible guess and solution.
+When a hint is requested, Wordly does not exhaustively search every possible guess and solution.
 That would take days of compute time, even in a compiled language. 
 
-Instead, this AI uses various heuristics and probablistic methods to produce an excellent guess.
+Instead, Wordly uses various heuristics and probablistic methods to produce an excellent guess.
 It has been shown that heuristics closely approximate optimal play. Using these, Wordly produces a 
 high-quality hint in under 1 second. 

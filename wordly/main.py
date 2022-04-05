@@ -1,13 +1,14 @@
 import argparse
 import cmd
 import random
+import sys
 
 from collections import Counter
 
 from wordly.game import make_guess
 from wordly.solver import Solver
 from wordly.util import ColoredText
-from word_pool import WordPool
+from wordly.word_pool import WordPool
 from wordly.word_list import all_wordle_words, common_wordle_words_4k
 
 
@@ -103,6 +104,8 @@ class PlayHuman(cmd.Cmd):
     def default(self, line):
         # renders the prompt and gets a response
         w = line.strip().upper()
+        if w == 'EXIT':
+            return True
 
         if w == "?":  # get a hint from the AI
             s = Solver(hard_mode=self.hard_mode)
@@ -121,7 +124,10 @@ class PlayHuman(cmd.Cmd):
             return False
 
         if self.hard_mode and w not in self.valid.pool:
-            print(ColoredText.OKBLUE + ' '*7 + '{} violates the hard mode rules.\n'.format(w) + ColoredText.ENDC)
+            print(ColoredText.OKBLUE + ' '*7 + '{} violates the hard mode rules. \n'.format(w) + 
+                ColoredText.ENDC)
+            print(ColoredText.OKBLUE + ' '*7 + 'You must reuse all correct letters and positions. \n' + 
+                ColoredText.ENDC)
             return False
 
         result = make_guess(w, self.target)
@@ -137,9 +143,13 @@ class PlayHuman(cmd.Cmd):
             else:
                 print(ColoredText.OKBLUE + ' '*12 + 'You win!' + ColoredText.ENDC)
             return True
+        elif len(self.guesses) == 6:
+            print(ColoredText.FAIL + ' '*12 + 'You lost.' + ColoredText.ENDC)
+            print(ColoredText.FAIL + ' '*12 + 'The word was: '.format(self.target) + 
+                ColoredText.ENDC + ColoredText.OKGREEN + self.target + ColoredText.ENDC)
+            return True
 
-
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--ai', action='store_true')
     parser.add_argument('--hard', action='store_true')
@@ -150,3 +160,6 @@ if __name__ == '__main__':
         solve(s)
     else:
         PlayHuman(hard_mode=args.hard).cmdloop()
+
+if __name__ == '__main__':
+    main()

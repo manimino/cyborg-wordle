@@ -16,7 +16,7 @@ To play: `python main.py`.
 
 Hard mode: `python main.py --hard` 
 
-Watch Wordly play: `python main.py --ai`. Can be used with hard mode.
+Watch Wordly play: `python main.py --ai`. Can be used with hard mode. AI mode uses a harder word list.
 
 ## Design Details
 

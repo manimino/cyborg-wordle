@@ -7,7 +7,7 @@ from collections import Counter
 
 from wordly.game import make_guess
 from wordly.solver import Solver
-from wordly.util import ColoredText
+from wordly.util import ColoredText, colorize
 from wordly.word_pool import WordPool
 from wordly.word_list import all_wordle_words, common_wordle_words_4k
 
@@ -41,8 +41,9 @@ def solve(s: Solver):
     while True:
         result = make_guess(guess, target)
         guesses[guess] = result
-        print(guess)
-        print(result)
+        print('guessed:', guess)
+        print('results:', colorize(guess, result))
+        print('')
         if guess == target:
             print('got it in', len(guesses), 'guesses')
             return len(guesses)
@@ -52,7 +53,11 @@ def solve(s: Solver):
             guess = s.targets.pool.pop()
         else:
             next_words = s.get_next_words(guesses)
-            print(next_words[:min(10, len(next_words))])
+            print('thinking:', next_words[:min(10, len(next_words))])
+            if len(s.targets.pool) < 10:
+                print('possibilities left:', list(s.targets.pool))
+            else:
+                print('possibilities left:', len(s.targets.pool))
             guess = next_words[0][0]
 
 

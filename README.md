@@ -16,7 +16,7 @@ To play: `python main.py`.
 
 Hard mode: `python main.py --hard` 
 
-Watch Wordly play: `python main.py --ai`. Can be used with hard mode. AI mode uses a harder word list.
+Watch Wordly play: `python main.py --ai`. AI mode uses a harder word list.
 
 ## Design Details
 
@@ -32,7 +32,8 @@ may be used as a guess.
 ### AI Details
 
 Wordle is a solved game in both easy and hard modes. There exists a tree of guesses
-that will always win the game. However, following the same decision tree every game isn't much fun.
+that will always win the game. But following the same decision tree every game isn't much fun.
+And writing an AI that can play from any game state is more interesting too.
 
 Thus, this implementation is a 'cyborg' game, where a human plays with optional computer assistance. 
 Learning from Wordly is a great way to train your Wordle skills.

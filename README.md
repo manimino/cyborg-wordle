@@ -16,8 +16,6 @@ Hard mode: `python main.py --hard`
 
 Watch Wordly play: `python main.py --ai`. AI mode uses a harder word list.
 
-Wordly is a clever Wordle AI. It wins over 99% of all Wordles.
-
 ## Design Details
 
 ### Game
@@ -33,13 +31,14 @@ may be used as a guess.
 
 Wordle is a solved game in both easy and hard modes. There exists a tree of guesses
 that will always win the game. But following the same decision tree every game isn't much fun.
-And writing an AI that can play from any game state is more interesting too.
+And an AI that can play from any game state is more interesting too.
 
 Thus, this implementation is a 'cyborg' game, where a human plays with optional computer assistance. 
 Learning from Wordly is a great way to train your Wordle skills.
 
-When a hint is requested, Wordly does not exhaustively search every possible guess and solution.
+Wordly does not exhaustively search every possible guess and solution.
 Instead, Wordly considers a few hundred words and picks one that will narrow down the pool of possible answers.
+This produces good-enough guesses quickly. Wordly will win > 99% of all Wordle games.
  
 ### Further reading
 

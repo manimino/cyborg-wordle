@@ -4,7 +4,7 @@ Command-line Wordle game with optional assistance from your AI pal, Wordly.
 
 Supports normal mode and hard mode.
 
-Type '?' to get a hint from Wordly if you're stuck.
+Type '?' to get a hint from Wordly if you're stuck. Man and machine combine to conquer Wordle.
 
 ![demo](images/demo_daddy.gif)
 
@@ -29,20 +29,17 @@ may be used as a guess.
 
 ### AI Details
 
-Wordle is a solved game in both easy and hard modes. There exists a tree of guesses
-that will always win the game. But following the same decision tree every game isn't much fun.
-And an AI that can play from any game state is more interesting too.
-
-Thus, this implementation is a 'cyborg' game, where a human plays with optional computer assistance. 
-Learning from Wordly is a great way to train your Wordle skills.
-
 Wordly does not exhaustively search every possible guess and solution.
 Instead, Wordly considers a few hundred words and picks one that will narrow down the pool of possible answers.
 This produces good-enough guesses quickly. Wordly will win > 99% of all Wordle games.
+
+There are strategies that solve Wordle 100% of the time, but they rely on specific game states. Wordly can provide
+good guesses in any game state, such as a game a human has played the first part of.
  
 ### Further reading
 
 Wordly's heuristics are based on these sources.
 
 https://www.poirrier.ca/notes/wordle
+
 http://sonorouschocolate.com/notes/index.php?title=The_best_strategies_for_Wordle

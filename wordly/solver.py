@@ -8,7 +8,7 @@ from wordly.word_pool import WordPool
 from wordly.word_list import all_wordle_words, top_first_guesses, common_wordle_words_4k
 
 
-class Solver():
+class Solver:
     def __init__(self, hard_mode=False, cost_exp=1.75, max_pool_size=5000, gt_ratio=1):
         self.hard_mode = hard_mode
         # targets represents the remaining possible solutions to a puzzle after applying guesses
@@ -54,7 +54,11 @@ class Solver():
         # If the guess and target pools are large, we do some heuristic
         # stuff to reduce or subsample the space before running the all-pairs search.
         targets_subset = copy.deepcopy(self.targets)
-        valids_subset = copy.deepcopy(self.valids)
+        if len(guesses) >= 5:
+            # only consider possible answers for the final guess
+            valids_subset = copy.deepcopy(self.targets)
+        else:
+            valids_subset = copy.deepcopy(self.valids)
         pool_size = len(self.valids.pool) * len(self.targets.pool)
 
         # Each pair takes around 0.2ms to check, so we want to reduce pool_size to <= 5000.

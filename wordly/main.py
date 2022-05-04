@@ -1,9 +1,6 @@
 import argparse
 import cmd
 import random
-import sys
-
-from collections import Counter
 
 from wordly.game import make_guess
 from wordly.solver import Solver

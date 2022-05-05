@@ -1,9 +1,9 @@
 import copy
 import random
-import time
+
 from typing import *
 
-from wordly.game import make_guess
+from wordly.guess import Guess, guess_result
 from wordly.word_pool import WordPool
 from wordly.word_list import all_wordle_words, top_first_guesses, common_wordle_words_4k
 
@@ -27,19 +27,22 @@ class Solver:
         self.max_pool_size = max_pool_size
         self.gt_ratio = gt_ratio
 
-    def get_next_words(self, guesses) -> List[Tuple[str, int]]:
-        # Returns a list of good words to guess next
+    def get_next_words(self, guesses: List[Guess]) -> List[Tuple[str, int]]:
+        """
+        Return a list of good words to guess next, sorted so the best one is first.
 
-        # First guesses are pre-baked; otherwise that's a really long search
-        # that's the same every game.
+        First guesses are pre-baked; otherwise that's a really long search
+        that's the same every game.
+        """
         if len(guesses) == 0:
             random.shuffle(top_first_guesses)
             return [(x, 1) for x in top_first_guesses]
 
         # apply guess feedback to eliminate invalid targets and valid guesses.
-        self.targets.apply_guesses(guesses)
-        if self.hard_mode:
-            self.valids.apply_hardmode_constraints(guesses)
+        for g in guesses:
+            self.targets.apply_guess(g)
+            if self.hard_mode:
+                self.valids.apply_hardmode_constraints(g)
 
         # Handle edge case: if there are only two targets left, you don't want to pick
         # "any guess that reduces the target pool to 1", you want to pick
@@ -66,7 +69,7 @@ class Solver:
         # encourage guessing of new letters.
         if pool_size > self.max_pool_size:
             # reduce valid guesses pool by removing words with nonmatching letters
-            ls = list((k, v) for k, v in guesses.items())
+            ls = list((g.word, g.result) for g in guesses)
             random.shuffle(ls)
             for guess, result in ls:
                 if len(valids_subset.pool) * len(targets_subset.pool) <= self.max_pool_size:
@@ -83,19 +86,17 @@ class Solver:
         while pool_size > self.max_pool_size:
             if len(valids_subset.pool) >= len(targets_subset.pool) * self.gt_ratio:
                 # reduce the guesses pool
-                vpool = random.sample(list(valids_subset.pool),
-                                      max(len(valids_subset.pool) // 2, 10)
-                                      )
+                size = max(len(valids_subset.pool) // 2, 10)
+                size = min(size, len(valids_subset.pool))
+                vpool = random.sample(list(valids_subset.pool), size)
                 valids_subset.remove_all_except(vpool)
             else:
                 # reduce the targets pool
-                tpool = random.sample(list(targets_subset.pool),
-                                      max(len(targets_subset.pool)//2, 10)
-                                      )
+                size = max(len(targets_subset.pool) // 2, 10)
+                size = min(size, len(targets_subset.pool))
+                tpool = random.sample(list(targets_subset.pool), size)
                 targets_subset.remove_all_except(tpool)
             pool_size = len(targets_subset.pool) * len(valids_subset.pool)
-
-        t0 = time.time()
 
         # now search all (valid guess, target) pairs to find the best guess from the
         # reduced pools.
@@ -115,13 +116,13 @@ class Solver:
                 guess_score -= 5
             
             # now, let's see what the solution space looks like after applying this guess
-            guesses_copy = copy.deepcopy(guesses)
+            new_guesses = copy.deepcopy(guesses)
             for i, tw in enumerate(targets_pool):
                 targets_copy = copy.deepcopy(targets_subset)
-                new_guesses = {guess: make_guess(guess, tw)}
-                new_guesses.update(guesses)
-                n_before = len(targets_copy.pool)
-                targets_copy.apply_guesses(new_guesses)
+                result = guess_result(guess, tw)
+                new_guesses.append(Guess(guess, result))
+                for g in new_guesses:
+                    targets_copy.apply_guess(g)
                 n_left = len(targets_copy.pool)
                 guess_score += n_left**self.cost_exp
                 if guess_score > best_score:
@@ -135,70 +136,3 @@ class Solver:
         guess_scores.sort(key=lambda x: x[1])
         return guess_scores
 
-"""
-Functions that use the Solver and its Dictionary
-"""
-def sanitize_validate_input(guesses:dict) -> dict:
-    guesses_upper = {}
-    for guess, result in guesses.items():
-        guesses_upper[guess.upper()] = result.upper()
-        assert len(guess) == 5
-        assert len(result) == 5
-        assert guess.isalpha()
-        for c in result:
-            assert c.isalpha() or c in ['.', '?']
-    return guesses_upper
-
-
-def recommend_next_words(guesses: dict, hard_mode=False) -> list:
-    guesses = sanitize_validate_input(guesses)
-    # run solver
-    s = Solver(hard_mode)
-    next_words = s.get_next_words(guesses)
-    if len(next_words) > 10:
-        return next_words[:10]
-    else:
-        return next_words
-
-
-def fit_params():
-    # This was used to run experiments to find good defaults for each solver param
-    all_results = []
-    N_TRIALS = 1000
-    cost_exps = [1.75]
-    mpoolsizes = [5000]
-    gt_ratios = [1.0]
-    modes = [True, False]
-    import math
-    tot = math.prod([len(x) for x in [cost_exps, mpoolsizes, gt_ratios, modes]])
-    tot *= N_TRIALS
-    print('running', tot, 'trials')
-    tnum = 0
-    for hard_mode in modes:
-        for cost_exp in cost_exps:
-            for max_pool_size in mpoolsizes:
-                for gt_ratio in gt_ratios:
-
-                    results = []
-                    for i in range(N_TRIALS):
-                        tnum += 1
-                        if tnum % 10 == 2:
-                            print(round(tnum / tot * 100, 3), '% done')
-                        s = Solver(hard_mode=hard_mode,
-                                   max_pool_size=max_pool_size,
-                                   gt_ratio=gt_ratio,
-                                   cost_exp=cost_exp)
-                        result = solve(s)
-                        results.append(result)
-                    counts = Counter(results)
-                    losses = 0
-                    mean = round(sum(results) / len(results), 3)
-                    for k in counts.keys():
-                        if k > 6:
-                            losses += 1
-                    losses = round(losses / len(results) * 100, 3)
-                    all_results.append((hard_mode, cost_exp, max_pool_size, gt_ratio, mean, losses))
-    print('hard_mode, cost_exp, max_pool_size, gt_ratio, mean, losses')
-    for r in all_results:
-        print(str(r) + ',')
-    print(tot)

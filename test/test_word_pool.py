@@ -54,3 +54,4 @@ def test_entropy(words, est_entropy):
     for i in range(5):
         wp.pos_counts.append(Counter([w[i] for w in wp.pool]))
     assert abs(sum(wp.get_entropy())/5 - est_entropy) < 0.01, f'entropy off for: {words}'
+

@@ -56,22 +56,7 @@ class WordPool:
             if w[pos] == char:
                 matches.add(w)
         return matches
-
-    def get_entropy(self) -> List[float]:
-        """Compute the entropy of each position in the word."""
-        ents = []
-        n_words = len(self.pool)
-        for ct in self.pos_counts:
-            pos_entropy = 0
-            for v in ct.values():
-                if v == n_words or v == 0:
-                    # entropy is 0 if all the same, but log would throw an error there
-                    continue
-                x = v / n_words
-                pos_entropy -= x * log2(x)
-            ents.append(pos_entropy)
-        return ents
-
+    
     def __str__(self):
         if len(self.pool) <= 10:
             return 'Words remaining: {} {}'.format(len(self.pool), list(self.pool))

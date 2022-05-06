@@ -225,7 +225,6 @@ class Solver:
                 for g in new_guesses:
                     targets_copy.apply_guess(g)
                     n_left = len(targets_copy.pool)
-                    # guess_score += max(targets_copy.get_entropy())
                     guess_score += n_left**self.cost_exp
                 if guess_score > best_score:
                     # we already know this guess is worse than one we have

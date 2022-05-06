@@ -37,20 +37,3 @@ def test_guess_pool(guesses, pool):
         targets.apply_guess(g)
     assert targets.pool == pool
 
-
-@pytest.mark.parametrize("words, est_entropy", [
-    ({'SPIKE'}, 0),
-    ({'ABATE', 'OOZES'}, 1),
-    ({'ABATE', 'OOZES', 'CANDY'}, 1),
-    ({'AAAAA', 'BBBBB', 'CCCCC'}, 1),
-    ({'BBBBA', 'BBBAB', 'BBABB', 'BABBB', 'ABBBB'}, 0.722),  # mostly B, so entropy is lower than 1.
-    ({'KECKS', 'MECKS', 'FECKS', 'HECKS'}, 0.4)
-])
-def test_entropy(words, est_entropy):
-    # Set up a word pool with our fake test words. Manually create the pos_counts.
-    wp = WordPool()
-    wp.pool = words
-    wp.pos_counts = []
-    for i in range(5):
-        wp.pos_counts.append(Counter([w[i] for w in wp.pool]))
-    assert abs(sum(wp.get_entropy())/5 - est_entropy) < 0.01, f'entropy off for: {words}'

@@ -88,7 +88,7 @@ class WordPool:
         self._apply_exact_matches(g.result)
         self.apply_nonmatches(g.word, g.result)
         self._apply_inexact_matches(g.word, g.result)
-        self.remove(g.word)  # don't guess the same word repeatedly
+        self.remove(g.word)  # prevents guessing the same word repeatedly
 
     def apply_hardmode_constraints(self, g: Guess):
         """

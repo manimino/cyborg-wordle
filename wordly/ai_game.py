@@ -12,7 +12,9 @@ def play_ai_game(hard_mode):
     target, _ = random.choice(all_wordle_words)
     word = s.get_next_words(game.guesses)[0][0]
     while True:
-        game.guess_word(word)
+        result = game.guess_word(word)
+        if result:
+            raise ValueError(result)
         print('guessed:', word)
         g = game.guesses[-1]
         print('results:', colorize(g.word, g.result))

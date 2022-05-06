@@ -18,7 +18,7 @@ def main():
             for i in range(100):
                 results.append(play_ai_game(args.hard))
                 c = Counter(results)
-                for n in range(2, max(c.keys())):
+                for n in range(2, max(c.keys())+1):
                     print(f'{n} guesses:', c.get(n, 0))
         else:
             play_ai_game(args.hard)

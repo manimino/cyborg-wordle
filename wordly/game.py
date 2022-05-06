@@ -48,13 +48,13 @@ class Game:
             for i, c in enumerate(g.word):
                 if g.result[i] == '?':
                     # inexact match
-                    s.append(ColoredText.WARNING + c + ColoredText.ENDC)
+                    s.append(ColoredText.YELLOW + c + ColoredText.NONE)
                 elif g.result[i] == '.':
                     # nonmatch
-                    s.append(ColoredText.FAIL + c + ColoredText.ENDC)
+                    s.append(ColoredText.RED + c + ColoredText.NONE)
                 else:
                     # match
-                    s.append(ColoredText.OKGREEN + c + ColoredText.ENDC)
+                    s.append(ColoredText.GREEN + c + ColoredText.NONE)
             print(' ' * 12 + ' '.join(s))
         n_blank = 6 - len(self.guesses)
         for _ in range(n_blank):

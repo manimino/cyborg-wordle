@@ -12,16 +12,19 @@ def keyboard_str(guesses: list) -> str:
         for i, c in enumerate(g.word):
             if g.result[i] == '?':
                 # inexact match
-                letter_colors[c] = ColoredText.WARNING
+                letter_colors[c] = ColoredText.YELLOW
             elif g.result[i] == '.':
                 # nonmatch
-                letter_colors[c] = ColoredText.FAIL
+                letter_colors[c] = ColoredText.RED
             else:
                 # match
-                letter_colors[c] = ColoredText.OKGREEN
+                letter_colors[c] = ColoredText.GREEN
     ret = []
     for c in letters:
-        ret.append(letter_colors[c] + c + ColoredText.ENDC)
+        if letter_colors[c]:
+            ret.append(letter_colors[c] + c + ColoredText.NONE)
+        else:
+            ret.append(c)
     return ' '*3 + '(' + ''.join(ret) + ')'
 
 
@@ -57,24 +60,24 @@ class CommandLineGame(cmd.Cmd):
             ai_words = s.get_next_words(self.game.guesses)
             ai_word = ai_words[0][0]
             self.game.render_cli()
-            print(ColoredText.OKBLUE + ' '*7 + 'Try the word "{}".\n'.format(ai_word) + ColoredText.ENDC)
+            print(ColoredText.BLUE + ' '*7 + 'Try the word "{}".\n'.format(ai_word) + ColoredText.NONE)
             return
 
         result_str = self.game.guess_word(w)
         if result_str:
-            print(ColoredText.OKBLUE + ' ' * 7 + result_str + ColoredText.ENDC)
+            print(ColoredText.BLUE + ' ' * 7 + result_str + ColoredText.NONE)
 
         self.prompt = keyboard_str(self.game.guesses) + ' > '
 
         self.game.render_cli()
         if w == self.game.target:
             if self.game.hard_mode:
-                print(ColoredText.OKBLUE + ' '*12 + '*You win!*' + ColoredText.ENDC)
+                print(ColoredText.BLUE + ' '*12 + '*You win!*' + ColoredText.NONE)
             else:
-                print(ColoredText.OKBLUE + ' '*12 + 'You win!' + ColoredText.ENDC)
+                print(ColoredText.BLUE + ' '*12 + 'You win!' + ColoredText.NONE)
             return True
         elif len(self.game.guesses) == 6:
-            print(ColoredText.FAIL + ' '*12 + 'You lost.' + ColoredText.ENDC)
-            print(ColoredText.FAIL + ' '*12 + 'The word was: '.format(self.game.target) +
-                  ColoredText.ENDC + ColoredText.OKGREEN + self.game.target + ColoredText.ENDC)
+            print(ColoredText.RED + ' '*12 + 'You lost.' + ColoredText.NONE)
+            print(ColoredText.RED + ' '*12 + 'The word was: '.format(self.game.target) +
+                  ColoredText.NONE + ColoredText.GREEN + self.game.target + ColoredText.NONE)
             return True

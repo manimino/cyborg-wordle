@@ -1,12 +1,10 @@
-
 class ColoredText:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
+    NONE = '\033[0m'
+    RED = '\033[1;31m'
+    GREEN = '\033[1;32m'
+    YELLOW = '\033[1;93m'
+    BLUE = '\033[1;34m'
+    WHITE = '\033[37m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
@@ -18,10 +16,10 @@ def colorize(guess: str, result: str) -> str:
     ret = []
     for i in range(len(guess)):
         if result[i] == '?':
-            ret.append(ColoredText.WARNING + guess[i] + ColoredText.ENDC)
+            ret.append(ColoredText.YELLOW + guess[i] + ColoredText.NONE)
         elif result[i] == '.':
-            ret.append(ColoredText.FAIL + guess[i] + ColoredText.ENDC)
+            ret.append(ColoredText.RED + guess[i] + ColoredText.NONE)
         else:
-            ret.append(ColoredText.OKGREEN + guess[i] + ColoredText.ENDC)
+            ret.append(ColoredText.GREEN + guess[i] + ColoredText.NONE)
     return ''.join(ret)
 

@@ -1,5 +1,5 @@
 from collections import Counter
-from math import log
+from math import log2
 from typing import *
 
 from wordly.guess import Guess
@@ -64,11 +64,11 @@ class WordPool:
         for ct in self.pos_counts:
             pos_entropy = 0
             for v in ct.values():
+                if v == n_words or v == 0:
+                    # entropy is 0 if all the same, but log would throw an error there
+                    continue
                 x = v / n_words
-                if x == 1:
-                    pos_entropy = 0
-                else:
-                    pos_entropy -= x * log(x, len(ct))  # log base is number of different chars
+                pos_entropy -= x * log2(x)
             ents.append(pos_entropy)
         return ents
 
@@ -115,26 +115,52 @@ class WordPool:
                 if w_counts[c] < q_counts[c]:
                     self.remove(w)
 
-    def apply_nonmatches(self, guess: str, result: str):
+    def apply_nonmatches(self, word: str, result: str):
         """Eliminate words from the pool if they contain letters that we know don't match."""
-        counts = Counter(guess)
-        for i, c in enumerate(guess):
+        counts = Counter(word)
+
+        # Cases:
+        # - If all copies of a letter are nonmatches, we can eliminate all words containing the letter.
+        # - But if there is an inexact or exact match with a different copy of the letter, we
+        # can only eliminate words containing too many of the letter and words with the letter
+        # at that exact position.
+        # Steps:
+        # 1. Find nonmatching letters
+        # 2. Figure out which case they belong to
+        # 3. Apply appropriate filter behavior
+        actions = []
+        _SKIP = 0
+        _NONMATCH_POS = 1
+        _NONMATCH_WORD = 2
+        for i, ci in enumerate(word):
             if result[i] == '.':
-                # is there a yellow or green c elsewhere in the guess? we need to check that
-                if counts[c] == 1:
-                    # no other instances of c. We can just eliminate all words containing c.
-                    for w in list(self.lookup[c]):
+                action = _NONMATCH_WORD
+                # check for other occurrences of this char
+                for j, cj in enumerate(word):
+                    if cj == ci and i != j and result[j] != '.':
+                        # found another occurrence, and it's some kind of match
+                        action = _NONMATCH_POS
+                actions.append(action)
+            else:
+                actions.append(_SKIP)
+
+        counts = Counter(word)
+        for i, ci in enumerate(word):
+            if actions[i] == _SKIP:
+                continue
+            if actions[i] == _NONMATCH_POS:
+                # remove word if nonmatch letter is at this pos
+                for w in self.match_char_pos(ci, i):
+                    self.remove(w)
+                # remove word if too many copies of this letter
+                for w in list(self.pool):
+                    wc = Counter(w)
+                    if wc[ci] >= counts[ci]:
                         self.remove(w)
-                else:
-                    # eliminate all words with c at this position.
-                    for w in self.match_char_pos(c, i):
-                        self.remove(w)
-                    # Also eliminate all words with a c-count greater or equal to the c-count in the guess.
-                    # if there were another c in the target word, this position would've been yellow.
-                    for w in list(self.pool):
-                        wc = Counter(w)
-                        if wc[c] >= counts[c]:
-                            self.remove(w)
+            else:
+                # We can just eliminate all words containing c.
+                for w in list(self.lookup[ci]):
+                    self.remove(w)
 
     def _apply_exact_matches(self, result: str):
         # The only viable words will be ones that have this char at this position.

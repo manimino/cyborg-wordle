@@ -21,7 +21,15 @@ from wordly.word_pool import WordPool
         Guess('GAMES', '.A...'),
         Guess('PARTY', '.A..Y'),
         Guess('FAWNY', '.A..Y'),
-    ], {'JAZZY'})
+    ], {'JAZZY'}),  # test case from an Adversarial Wordle game
+    ([
+        Guess('CLAST', '...?.'),
+        Guess('SPOOR', '?....'),
+        Guess('KNEES', '..E.S'),
+     ],
+     {'QUEYS', 'DIEBS', 'WHEYS',
+      'HIEMS', 'VIEWS', 'WHEWS',
+      'FIEFS'})  # tests some tricky nonmatch logic
 ])
 def test_guess_pool(guesses, pool):
     targets = WordPool()
@@ -36,6 +44,7 @@ def test_guess_pool(guesses, pool):
     ({'ABATE', 'OOZES', 'CANDY'}, 1),
     ({'AAAAA', 'BBBBB', 'CCCCC'}, 1),
     ({'BBBBA', 'BBBAB', 'BBABB', 'BABBB', 'ABBBB'}, 0.722),  # mostly B, so entropy is lower than 1.
+    ({'KECKS', 'MECKS', 'FECKS', 'HECKS'}, 0.4)
 ])
 def test_entropy(words, est_entropy):
     # Set up a word pool with our fake test words. Manually create the pos_counts.

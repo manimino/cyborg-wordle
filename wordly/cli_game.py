@@ -56,7 +56,7 @@ class CommandLineGame(cmd.Cmd):
             return True
 
         if w == "?":  # get a hint from the AI
-            s = Solver(hard_mode=self.game.hard_mode)
+            s = Solver(hard_mode=self.game.hard_mode, all_words=False)
             ai_words = s.get_next_words(self.game.guesses)
             ai_word = ai_words[0][0]
             self.game.render_cli()

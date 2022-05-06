@@ -16,7 +16,7 @@ def main():
         if args.stats:
             results = []
             for i in range(100):
-                results.append(play_ai_game(args.hard))
+                results.append(play_ai_game(args.hard, all_words=False))
                 c = Counter(results)
                 for n in range(2, max(c.keys())+1):
                     print(f'{n} guesses:', c.get(n, 0))

@@ -6,9 +6,12 @@ from wordly.solver import Solver
 from wordly.word_list import all_wordle_words
 
 
-def play_ai_game(hard_mode):
-    game = Game(hard_mode=hard_mode, all_words=True)
-    s = Solver(hard_mode=hard_mode)
+def play_ai_game(hard_mode, all_words=True):
+    game = Game(hard_mode=hard_mode, all_words=all_words)
+    if all_words:
+        s = Solver(hard_mode=hard_mode)
+    else:
+        s = Solver(hard_mode=hard_mode, all_words=all_words)
     target, _ = random.choice(all_wordle_words)
     word = s.get_next_words(game.guesses)[0][0]
     while True:

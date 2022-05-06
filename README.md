@@ -31,10 +31,9 @@ may be used as a guess.
 
 Wordly does not exhaustively search every possible guess and solution.
 Instead, Wordly considers a few hundred words and picks one that will narrow down the pool of possible answers.
-This produces good-enough guesses quickly. Wordly will win > 99% of all Wordle games.
+This produces good-enough guesses quickly. Wordly will win ~99% of all Wordle games.
 
-There are strategies that solve Wordle 100% of the time, but they rely on specific game states. Wordly can provide
-good guesses in any game state, such as a game a human has played the first part of.
+![histogram](images/histo.png)
  
 ### Further reading
 
